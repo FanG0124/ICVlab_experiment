@@ -1,7 +1,8 @@
 # ICVlab_experiment
 
-Date：2020.10.4
+Date: 2020.10.4
 
+Date: 2020.10.5
 my_experiment
 
 epoch=2000,

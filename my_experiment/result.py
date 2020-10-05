@@ -3,7 +3,7 @@ import torch
 import pandas as pd
 import matplotlib.pyplot as plt
 
-epoch = 475
+epoch = 16
 # converge_train = []
 path_train = 'dataset/converge_train'
 path_test = 'dataset/converge_test'

@@ -57,9 +57,11 @@ class my_mlp():
     # 设置优化器
     def set_mlp_optim(self):
         if self.optimizer == "Adam":
-            return torch.optim.Adam(self.net().parameters(), lr=self.lr)
+            return torch.optim.Adam(self.net.parameters(), lr=self.lr)
         elif self.optimizer == "SGD":
-            return torch.optim.SGD(self.net().parameters(), lr=self.lr)
+            return torch.optim.SGD(self.net.parameters(), lr=self.lr)
+        elif self.optimizer == "rmsprop":
+            return torch.optim.rmsprop(self.net.parameters(), lr=self.lr)
 
     # 设置loss函数
     def set_mlp_lossfunc(self):

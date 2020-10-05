@@ -23,9 +23,15 @@ class Mlp(torch.nn.Module):
         return x
 
 
-class my_base_mlp():
+class my_mlp():
 
-    def __init__(self, input_size, hidden_size, output_size, optimizer, loss_func, lr):
+    _converge_train = []
+    _converge_test = []
+
+    def __init__(self, train_set, test_set, epoch, input_size, hidden_size, output_size, optimizer, loss_func, lr):
+        self.train_set = train_set  # 训练集
+        self.test_set = test_set  # 测试集
+        self.epoch = epoch  #
         self.input_size = input_size
         self.hidden_size = hidden_size
         self.output_size = output_size
@@ -33,8 +39,12 @@ class my_base_mlp():
         self.loss_func = loss_func
         self.lr = lr
 
+        self.net = self.set_mlp_index()  # 初始化网络
+        self.opt = self.set_mlp_optim()  # 初始化优化函数
+        self.loss_function = self.set_mlp_lossfunc()  # 初始化loss函数
+
     # 查看是否使用GPU
-    def choose_device(self):
+    def set_device(self):
         ngpu = 1
         # Decide which device we want to run on
         device = torch.device("cuda:0" if (torch.cuda.is_available() and ngpu > 0) else "cpu")
@@ -42,14 +52,14 @@ class my_base_mlp():
 
     # 设置mlp参数
     def set_mlp_index(self):
-        return Mlp(self.input_size, self.hidden_size, self.output_size).to(self.choose_device())
+        return Mlp(self.input_size, self.hidden_size, self.output_size).to(self.set_device())
 
     # 设置优化器
     def set_mlp_optim(self):
         if self.optimizer == "Adam":
-            return torch.optim.Adam(self.set_mlp_index().parameters(), lr=self.lr)
+            return torch.optim.Adam(self.net().parameters(), lr=self.lr)
         elif self.optimizer == "SGD":
-            return torch.optim.SGD(self.set_mlp_index().parameters(), lr=self.lr)
+            return torch.optim.SGD(self.net().parameters(), lr=self.lr)
 
     # 设置loss函数
     def set_mlp_lossfunc(self):
@@ -60,26 +70,12 @@ class my_base_mlp():
         elif self.loss_func == "RMSE":
             return mean_squared_error
 
-
-class my_mlp(my_base_mlp):
-
-    _converge_train = []
-    _converge_test = []
-
-    def __init__(self, train_set, test_set, epoch, input_size, hidden_size, output_size, optimizer, loss_func, lr):
-        super(my_mlp, self).__init__(input_size, hidden_size, output_size, optimizer, loss_func, lr)
-        self.train_set = train_set
-        self.test_set = test_set
-        self.epoch = epoch
-        self.net = self.set_mlp_index()
-        self.loss_function = self.set_mlp_lossfunc()
-
     # 训练训练集
     def train_train_set(self):
         for step_train, (x_train, y_train) in enumerate(self.train_set):
             # 将数据放入cuda
-            x = Variable(x_train).to(self.choose_device())
-            y = Variable(y_train).to(self.choose_device())
+            x = Variable(x_train).to(self.set_device())
+            y = Variable(y_train).to(self.set_device())
 
             # net = self.set_mlp_index()
             prediction_train = self.net(x)
@@ -87,9 +83,9 @@ class my_mlp(my_base_mlp):
             # lossfunc = self.set_mlp_lossfunc()
             loss_train = self.loss_function(prediction_train, y)
 
-            self.set_mlp_optim().zero_grad()
+            self.opt.zero_grad()
             loss_train.backward()
-            self.set_mlp_optim().step()
+            self.opt.step()
         print("    训练集loss:{}".format(loss_train))
         self._converge_train.append(loss_train)
 
@@ -97,8 +93,8 @@ class my_mlp(my_base_mlp):
     def test_test_set(self):
         for step_test, (x_test, y_test) in enumerate(self.test_set):
             # 将数据放入cuda
-            x = Variable(x_test).to(self.choose_device())
-            y = Variable(y_test).to(self.choose_device())
+            x = Variable(x_test).to(self.set_device())
+            y = Variable(y_test).to(self.set_device())
             # net = self.set_mlp_index()
             prediction_test = self.net(x)
             # lossfunc = self.set_mlp_lossfunc()
@@ -117,8 +113,8 @@ class my_mlp(my_base_mlp):
 
     # 将训练好的网络保存
     def export_nn_params(self):
-        state = {'model': self.set_mlp_index().state_dict(),
-                 'optimizer_adam': self.set_mlp_optim().state_dict(),
+        state = {'model': self.net.state_dict(),
+                 'optimizer_adam': self.opt.state_dict(),
                  'epoch': self.epoch}
         torch.save(state, "./dataset/sd")
         print("网络保存完成")
@@ -127,12 +123,14 @@ class my_mlp(my_base_mlp):
     def train_my_mlp(self):
 
         for t in range(self.epoch):
+            print("****************************************************")
+            print("        第{}个epoch       ".format(t))
             start_time = datetime.datetime.now()
             self.train_train_set()
 
             self.test_test_set()
             end_time = datetime.datetime.now()
-            print("第{}个epoch用时{}".format(t, end_time - start_time))
+            print("        用时{}            ".format(end_time - start_time))
             self.export_data()
         self.export_nn_params()
 

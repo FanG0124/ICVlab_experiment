@@ -5,3 +5,8 @@
     epoch=2000,
     input_size=3, hidden_size=3, output_size=1,
     optimizer="Adam", loss_func="SmoothL1Loss", lr=1e-6
+    
+## my_experiment_06-1
+    epoch=500,
+    input_size=3, hidden_size=3, output_size=1,
+    optimizer="Adam", loss_func="MSE", lr=1e-6

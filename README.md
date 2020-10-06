@@ -15,3 +15,8 @@
     epoch=500,
     input_size=3, hidden_size=3, output_size=1,
     optimizer="rmsprop", loss_func="SmoothL1Loss", lr=1e-5
+
+## my_experiment_06-3
+    epoch=500,
+    input_size=3, hidden_size=3, output_size=1,
+    optimizer="rmsprop", loss_func="SmoothL1Loss", lr=1e-6

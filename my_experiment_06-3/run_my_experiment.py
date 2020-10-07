@@ -54,7 +54,7 @@ if __name__ == '__main__':
     if torch.cuda.is_available():
         my_mlp = mlp.my_mlp(loader_train, loader_test, epoch=500,
                             input_size=3, hidden_size=3, output_size=1,
-                            optimizer="rmsprop", loss_func="MSE", lr=1e-5)
+                            optimizer="Adam", loss_func="SmoothL1Loss", lr=3e-5)
         my_mlp.train_my_mlp()
         # net = mlp.train_mlp(loader_train, loader_test, 3, 3, 1, 500)
         # mlp.test_my_nn(net.to(use_gpu()), loader_test

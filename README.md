@@ -3,46 +3,13 @@
 
 更新内容
 ====
-## Date: 2020.10.5
+尝试数据均适用均值归一化来处理
 
-### my_experiment
+## Date: 2020.10.8
 
-    epoch=2000,
-    input_size=3, hidden_size=3, output_size=1,
-    optimizer="SGD", loss_func="MSE", lr=1e-3
+### my_experiment_08-1
 
-### my_experiment_02
-
-    epoch=2000,
-    input_size=3, hidden_size=3, output_size=1,
-    optimizer="Adam", loss_func="MSE", lr=1e-3
-
-### my_experiment_03
-
-    epoch=2000,
-    input_size=3, hidden_size=3, output_size=1,
-    optimizer="Adam", loss_func="MSE", lr=1e-4
-
-### my_experiment_04
-
-    epoch=2000,
-    input_size=3, hidden_size=3, output_size=1,
-    optimizer="Adam", loss_func="SmoothL1Loss", lr=1e-4
-
-### my_experiment_05
-
-    epoch=2000,
-    input_size=3, hidden_size=3, output_size=1,
-    optimizer="Adam", loss_func="MSE", lr=1e-5
-
-### my_experiment_06
-
-    epoch=2000,
+    epoch=500,
     input_size=3, hidden_size=3, output_size=1,
     optimizer="Adam", loss_func="SmoothL1Loss", lr=1e-6
 
-### my_experiment_07
-
-    epoch=2000,
-    input_size=3, hidden_size=3, output_size=1,
-    optimizer="Adam", loss_func="rmsprop", lr=1e-5

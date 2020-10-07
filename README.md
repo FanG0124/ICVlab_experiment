@@ -21,7 +21,7 @@
     input_size=3, hidden_size=3, output_size=1,
     optimizer="Adam", loss_func="SmoothL1Loss", lr=3e-5
 
-## my_experiment_06-2
+## my_experiment_06-4
     epoch=500,
     input_size=3, hidden_size=3, output_size=1,
     optimizer="Adam", loss_func="SmoothL1Loss", lr=7e-5

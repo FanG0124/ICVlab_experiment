@@ -16,14 +16,14 @@ def load_data():
     x_0 = total_data.iloc[:, 0:1:1].values
     x_12 = total_data.iloc[:, 1:3:1].values
     x_0 = normalize(x_0, axis=0, norm='max')  # 均值归一化
-    # x_12 = normalize(x_12, axis=0, norm='max')  # 均值归一化
-    x_12 = StandardScaler().fit_transform(x_12)  # 标准化
+    x_12 = normalize(x_12, axis=0, norm='max')  # 均值归一化
+    # x_12 = StandardScaler().fit_transform(x_12)  # 标准化
 
     # x_12 = -1 * np.log(x_12)
 
     x = np.c_[x_0, x_12]
     y = total_data.iloc[:, 3].values  # numpy
-
+    print(x)
     print("原始数据{}异常".format("无" if not np.isnan(x).any() else "有"))
     x = torch.from_numpy(x).float()
     y = torch.from_numpy(y).float()
@@ -61,9 +61,9 @@ if __name__ == '__main__':
     # x_train, y_train, x_test, y_test = load_data()
 
     if torch.cuda.is_available():
-        my_mlp = mlp.my_mlp(loader_train, loader_test, epoch=2000,
+        my_mlp = mlp.my_mlp(loader_train, loader_test, epoch=500,
                             input_size=3, hidden_size=3, output_size=1,
-                            optimizer="SGD", loss_func="MSE", lr=1e-3)
+                            optimizer="Adam", loss_func="SmoothL1Loss", lr=1e-6)
         my_mlp.train_my_mlp()
         # net = mlp.train_mlp(loader_train, loader_test, 3, 3, 1, 500)
         # mlp.test_my_nn(net.to(use_gpu()), loader_test

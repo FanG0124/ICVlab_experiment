@@ -3,6 +3,7 @@ import numpy as np
 from torch.autograd import Variable
 import torch.nn.functional as F
 import datetime
+from torch.optim.rmsprop import RMSprop
 from sklearn.metrics import explained_variance_score  # 可释方差也叫解释方差（explained_variance_score）
 from sklearn.metrics import mean_absolute_error  # 平均绝对误差（mean_absolute_error）
 from sklearn.metrics import mean_squared_error  # 均方误差（mean_squared_error）
@@ -61,7 +62,7 @@ class my_mlp():
         elif self.optimizer == "SGD":
             return torch.optim.SGD(self.net.parameters(), lr=self.lr)
         elif self.optimizer == "rmsprop":
-            return torch.optim.rmsprop(self.net.parameters(), lr=self.lr)
+            return RMSprop(self.net.parameters(), lr=self.lr)
 
     # 设置loss函数
     def set_mlp_lossfunc(self):

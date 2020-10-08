@@ -27,7 +27,8 @@ def load_data():
     print("原始数据{}异常".format("无" if not np.isnan(x).any() else "有"))
     x = torch.from_numpy(x).float()
     y = torch.from_numpy(y).float()
-    y = torch.unsqueeze(y, dim=1)    kflod = KFold(n_splits=10)
+    y = torch.unsqueeze(y, dim=1)
+    kflod = KFold(n_splits=10)
     for train_index, test_index in kflod.split(x):
         # print("train_index: {} , test_index: {} ".format(train_index, test_index))
         x_train, x_test = x[train_index], x[test_index]
